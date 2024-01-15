@@ -1,0 +1,30 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type RoleDocument {
+  _id: String!
+  name: String
+  organization: String
+  permissions: PermissionsTypes
+}
+
+type PermissionsTypes {
+  administration: [String!]
+  products: [String!]
+}
+
+type UserDocument {
+  _id: String!
+  name: String!
+  username: String!
+  email: String!
+  active: Boolean!
+  organization: String!
+  role: RoleDocument!
+}
+
+type Query {
+  users: [UserDocument!]!
+  user(id: String!): UserDocument!
+}
