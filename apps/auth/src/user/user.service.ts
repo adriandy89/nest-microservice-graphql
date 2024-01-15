@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-import { UserDTO } from 'libs/common/dtos/user.dto';
 import { IMeta } from 'libs/common/interfaces/metadata.interface';
 import { UserRepository } from './user.repository';
 import { FilterQuery } from 'mongoose';
 import { UserDocument } from 'libs/common/schemas/user.schema';
+import { CreateUserInput, UpdateUserInput } from 'libs/common/dtos/user/inputs';
 
 @Injectable()
 export class UserService {
@@ -28,7 +28,7 @@ export class UserService {
     );
   }
 
-  async create(userDTO: UserDTO, meta: IMeta) {
+  async create(userDTO: CreateUserInput, meta: IMeta) {
     const hash = await this.hashPassword(userDTO.password);
     return await this.userRepository.create({
       ...userDTO,
@@ -46,16 +46,16 @@ export class UserService {
     );
   }
 
-  async findOne(id: string, meta: IMeta) {
-    const filterQuery: FilterQuery<UserDocument> = { _id: id };
+  async findOne(_id: string, meta: IMeta) {
+    const filterQuery: FilterQuery<UserDocument> = { _id };
     if (meta.organization) filterQuery.organization = meta.organization;
     return await this.userRepository.findOne(filterQuery, {
       path: 'role',
     });
   }
 
-  async update(id: string, userDTO: UserDTO, meta: IMeta) {
-    const filterQuery: FilterQuery<UserDocument> = { _id: id };
+  async update({ _id, ...userDTO }: UpdateUserInput, meta: IMeta) {
+    const filterQuery: FilterQuery<UserDocument> = { _id };
     if (meta.organization) filterQuery.organization = meta.organization;
     const user = { ...userDTO };
     if (!!userDTO.password) {
@@ -67,8 +67,8 @@ export class UserService {
     });
   }
 
-  async delete(id: string, meta: IMeta) {
-    const filterQuery: FilterQuery<UserDocument> = { _id: id };
+  async delete(_id: string, meta: IMeta) {
+    const filterQuery: FilterQuery<UserDocument> = { _id };
     if (meta.organization) filterQuery.organization = meta.organization;
     return await this.userRepository.findOneAndDelete(filterQuery, {
       path: 'role',

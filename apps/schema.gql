@@ -28,3 +28,30 @@ type Query {
   users: [UserDocument!]!
   user(id: String!): UserDocument!
 }
+
+type Mutation {
+  createUser(createUserInput: CreateUserInput!): UserDocument!
+  updateUser(updateUserInput: UpdateUserInput!): UserDocument!
+  deleteUser(id: String!): UserDocument!
+}
+
+input CreateUserInput {
+  name: String!
+  username: String!
+  email: String!
+  password: String!
+  active: Boolean!
+  organization: String
+  role: String!
+}
+
+input UpdateUserInput {
+  name: String
+  username: String
+  email: String
+  password: String
+  active: Boolean
+  organization: String
+  role: String
+  _id: String!
+}

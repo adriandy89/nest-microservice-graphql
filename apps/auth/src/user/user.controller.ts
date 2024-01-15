@@ -3,15 +3,15 @@ import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { UserMsg } from 'libs/common/constants/rabbitmq.constants';
 import { handleError } from 'libs/common/utils/error-handler-micro';
-import { UserDTO } from 'libs/common/dtos/user.dto';
 import { IMeta } from 'libs/common/interfaces/metadata.interface';
+import { CreateUserInput, UpdateUserInput } from 'libs/common/dtos/user/inputs';
 
 @Controller()
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @MessagePattern(UserMsg.CREATE)
-  create(@Payload() payload: { userDTO: UserDTO; meta: IMeta }) {
+  create(@Payload() payload: { userDTO: CreateUserInput; meta: IMeta }) {
     return this.userService
       .create(payload.userDTO, payload.meta)
       .catch((error) => {
@@ -37,8 +37,8 @@ export class UserController {
     return found;
   }
   @MessagePattern(UserMsg.UPDATE)
-  update(@Payload() payload: { id: string; userDTO: UserDTO; meta: IMeta }) {
-    return this.userService.update(payload.id, payload.userDTO, payload.meta);
+  update(@Payload() payload: { userDTO: UpdateUserInput; meta: IMeta }) {
+    return this.userService.update(payload.userDTO, payload.meta);
   }
 
   @MessagePattern(UserMsg.DELETE)
