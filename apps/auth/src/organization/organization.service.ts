@@ -1,16 +1,17 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
-import { OrganizationDTO } from 'libs/common/dtos/organization.dto';
+import { Injectable } from '@nestjs/common';
 import { OrganizationRepository } from './organization.repository';
+import {
+  CreateOrganizationInput,
+  UpdateOrganizationInput,
+} from 'libs/common/dtos/inputs/organization';
+import { OrganizationDocument } from 'libs/common/schemas/organization.schema';
+import { FilterQuery } from 'mongoose';
 
 @Injectable()
 export class OrganizationService {
   constructor(private organizationRepository: OrganizationRepository) {}
 
-  async findByOrganizationname(organizationname: string) {
-    return await this.organizationRepository.findOne({ organizationname });
-  }
-
-  async create(organizationDTO: OrganizationDTO) {
+  async create(organizationDTO: CreateOrganizationInput) {
     return await this.organizationRepository.create(organizationDTO);
   }
 
@@ -18,22 +19,21 @@ export class OrganizationService {
     return await this.organizationRepository.find({});
   }
 
-  async findOne(id: string) {
-    return await this.organizationRepository.findOne({ _id: id });
+  async findOne(_id: string) {
+    const filterQuery: FilterQuery<OrganizationDocument> = { _id };
+    return await this.organizationRepository.findOne(filterQuery);
   }
 
-  async update(id: string, organizationDTO: OrganizationDTO) {
+  async update({ _id, ...organizationDTO }: UpdateOrganizationInput) {
+    const filterQuery: FilterQuery<OrganizationDocument> = { _id };
     return await this.organizationRepository.findOneAndUpdate(
-      { _id: id },
-      { $set: organizationDTO },
+      filterQuery,
+      organizationDTO,
     );
   }
 
-  async delete(id: string) {
-    await this.organizationRepository.findOneAndDelete({ _id: id });
-    return {
-      status: HttpStatus.OK,
-      msg: 'Deleted',
-    };
+  async delete(_id: string) {
+    const filterQuery: FilterQuery<OrganizationDocument> = { _id };
+    return await this.organizationRepository.findOneAndDelete(filterQuery);
   }
 }

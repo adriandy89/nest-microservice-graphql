@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { OrganizationController } from './organization.controller';
 import { ProxyModule } from '../common/proxy/proxy.module';
+import { OrganizationResolver } from './organization.resolver';
 
 @Module({
   imports: [ProxyModule],
-  controllers: [OrganizationController],
-  providers: [],
+  controllers: [],
+  providers: [OrganizationResolver],
 })
 export class OrganizationModule {}

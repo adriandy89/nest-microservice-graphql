@@ -22,8 +22,8 @@ export class RoleService {
     );
   }
 
-  async findOne(id: string, meta: IMeta) {
-    const filterQuery: FilterQuery<RoleDocument> = { _id: id };
+  async findOne(_id: string, meta: IMeta) {
+    const filterQuery: FilterQuery<RoleDocument> = { _id };
     if (meta.organization) filterQuery.organization = meta.organization;
     return await this.roleRepository.findOne(filterQuery);
   }

@@ -15,7 +15,6 @@ export * from './common/filters/exception.filter';
 export * from './common/interceptors/timeout.interceptor';
 export * from './common/proxy/client-proxy';
 export * from './common/proxy/proxy.module';
-export * from './organization/organization.controller';
 export * from './organization/organization.module';
 export * from './role/role.module';
 export * from './user/user.module';

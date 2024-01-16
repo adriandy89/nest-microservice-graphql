@@ -3,14 +3,17 @@ import { OrganizationService } from './organization.service';
 import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { OrganizationMsg } from 'libs/common/constants/rabbitmq.constants';
-import { OrganizationDTO } from 'libs/common/dtos/organization.dto';
+import {
+  CreateOrganizationInput,
+  UpdateOrganizationInput,
+} from 'libs/common/dtos/inputs/organization';
 
 @Controller()
 export class OrganizationController {
   constructor(private readonly organizationService: OrganizationService) {}
 
   @MessagePattern(OrganizationMsg.CREATE)
-  create(@Payload() organizationDTO: OrganizationDTO) {
+  create(@Payload() organizationDTO: CreateOrganizationInput) {
     return this.organizationService.create(organizationDTO).catch((error) => {
       handleError(
         error.code === 11000
@@ -35,8 +38,8 @@ export class OrganizationController {
   }
 
   @MessagePattern(OrganizationMsg.UPDATE)
-  update(@Payload() payload: any) {
-    return this.organizationService.update(payload.id, payload.organizationDTO);
+  update(@Payload() organizationDTO: UpdateOrganizationInput) {
+    return this.organizationService.update(organizationDTO);
   }
 
   @MessagePattern(OrganizationMsg.DELETE)

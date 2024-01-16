@@ -2,6 +2,11 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type OrganizationDocument {
+  _id: String!
+  name: String!
+}
+
 type RoleDocument {
   _id: String!
   name: String
@@ -36,6 +41,8 @@ type UserDocument {
 type Query {
   users: [UserDocument!]!
   user(id: String!): UserDocument!
+  organizations: [OrganizationDocument!]!
+  organization(id: String!): OrganizationDocument!
   roles: [RoleDocument!]!
   role(id: String!): RoleDocument!
 }
@@ -44,6 +51,9 @@ type Mutation {
   createUser(createUserInput: CreateUserInput!): UserDocument!
   updateUser(updateUserInput: UpdateUserInput!): UserDocument!
   deleteUser(id: String!): UserDocument!
+  createOrganization(createOrganizationInput: CreateOrganizationInput!): OrganizationDocument!
+  updateOrganization(updateOrganizationInput: UpdateOrganizationInput!): OrganizationDocument!
+  deleteOrganization(id: String!): OrganizationDocument!
   createRole(createRoleInput: CreateRoleInput!): RoleDocument!
   updateRole(updateRoleInput: UpdateRoleInput!): RoleDocument!
   deleteRole(id: String!): RoleDocument!
@@ -67,6 +77,15 @@ input UpdateUserInput {
   active: Boolean
   organization: String
   role: String
+  _id: String!
+}
+
+input CreateOrganizationInput {
+  name: String!
+}
+
+input UpdateOrganizationInput {
+  name: String
   _id: String!
 }
 
