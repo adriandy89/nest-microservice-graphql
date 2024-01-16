@@ -16,7 +16,10 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
     return (await createdDocument.save()).toJSON() as unknown as TDocument;
   }
 
-  async findOne(filterQuery: FilterQuery<TDocument>, populate?: any) {
+  async findOne(
+    filterQuery: FilterQuery<TDocument>,
+    populate?: any,
+  ): Promise<TDocument> {
     let document = undefined;
     if (!populate) {
       document = await this.model.findOne(filterQuery, {}, { lean: true });

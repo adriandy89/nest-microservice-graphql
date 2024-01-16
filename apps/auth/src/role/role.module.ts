@@ -4,6 +4,8 @@ import { RoleController } from './role.controller';
 import { RoleDocument, RoleSchema } from 'libs/common/schemas/role.schema';
 import { DatabaseModule } from 'libs/common/database';
 import { RoleRepository } from './role.repository';
+import { UserModule } from '../user/user.module';
+import { UserService } from '../user/user.service';
 
 @Module({
   imports: [
@@ -11,8 +13,9 @@ import { RoleRepository } from './role.repository';
     DatabaseModule.forFeature([
       { name: RoleDocument.name, schema: RoleSchema },
     ]),
+    UserModule,
   ],
   controllers: [RoleController],
-  providers: [RoleService, RoleRepository],
+  providers: [RoleService, RoleRepository, UserService],
 })
 export class RoleModule {}

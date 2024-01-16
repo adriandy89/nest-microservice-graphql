@@ -54,6 +54,10 @@ export class UserService {
     });
   }
 
+  async findOneByQuery(filterQuery: FilterQuery<UserDocument>) {
+    return await this.userRepository.findOne(filterQuery);
+  }
+
   async update({ _id, ...userDTO }: UpdateUserInput, meta: IMeta) {
     const filterQuery: FilterQuery<UserDocument> = { _id };
     if (meta.organization) filterQuery.organization = meta.organization;
