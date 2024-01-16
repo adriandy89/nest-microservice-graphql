@@ -67,11 +67,17 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
   async find(filterQuery: FilterQuery<TDocument>, populate?: any) {
     let documents = undefined;
     if (!populate) {
-      documents = await this.model.find(filterQuery, {}, { lean: true });
+      documents = await this.model
+        .find(filterQuery, {}, { lean: true })
+        .limit(1000)
+        .sort({ createdAt: 'desc' })
+        .exec();
     } else {
       documents = await this.model
         .find(filterQuery, {}, { lean: true })
         .populate(populate)
+        .limit(1000)
+        .sort({ createdAt: 'desc' })
         .exec();
     }
     return documents;
