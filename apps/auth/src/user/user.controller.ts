@@ -4,7 +4,7 @@ import { MessagePattern, Payload } from '@nestjs/microservices';
 import { UserMsg } from 'libs/common/constants/rabbitmq.constants';
 import { handleError } from 'libs/common/utils/error-handler-micro';
 import { IMeta } from 'libs/common/interfaces/metadata.interface';
-import { CreateUserInput, UpdateUserInput } from 'libs/common/dtos/user/inputs';
+import { CreateUserInput, UpdateUserInput } from 'libs/common/dtos/inputs/user';
 
 @Controller()
 export class UserController {

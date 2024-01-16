@@ -35,12 +35,6 @@ export class AuthService {
     if (user) return user;
 
     return null;
-    // const user = await this.prismaService.cmsUser.findUnique({
-    //   where: { id },
-    //   select: { isActive: true, role: true, email: true }
-    // });
-    // return (user && user.isActive && user.role === role && user.email === email);
-    return true;
   }
 
   async signIn(user: any) {

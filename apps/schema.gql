@@ -10,8 +10,17 @@ type RoleDocument {
 }
 
 type PermissionsTypes {
-  administration: [String!]
-  products: [String!]
+  administration: [ValidRoles!]
+  products: [ValidRoles!]
+}
+
+"""Valid permissions select"""
+enum ValidRoles {
+  LIST
+  CREATE
+  UPDATE
+  DELETE
+  ADMIN
 }
 
 type UserDocument {
@@ -27,12 +36,17 @@ type UserDocument {
 type Query {
   users: [UserDocument!]!
   user(id: String!): UserDocument!
+  roles: [RoleDocument!]!
+  role(id: String!): RoleDocument!
 }
 
 type Mutation {
   createUser(createUserInput: CreateUserInput!): UserDocument!
   updateUser(updateUserInput: UpdateUserInput!): UserDocument!
   deleteUser(id: String!): UserDocument!
+  createRole(createRoleInput: CreateRoleInput!): RoleDocument!
+  updateRole(updateRoleInput: UpdateRoleInput!): RoleDocument!
+  deleteRole(id: String!): RoleDocument!
 }
 
 input CreateUserInput {
@@ -53,5 +67,23 @@ input UpdateUserInput {
   active: Boolean
   organization: String
   role: String
+  _id: String!
+}
+
+input CreateRoleInput {
+  name: String!
+  organization: String
+  permissions: PermissionsInputs!
+}
+
+input PermissionsInputs {
+  administration: [ValidRoles!]
+  products: [ValidRoles!]
+}
+
+input UpdateRoleInput {
+  name: String
+  organization: String
+  permissions: PermissionsInputs
   _id: String!
 }

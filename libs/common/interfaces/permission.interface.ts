@@ -1,4 +1,4 @@
-import { Permissions } from '../constants/module-access.constants';
+import { Permissions } from '../enums';
 
 export interface IPermission {
   administration: Permissions[];

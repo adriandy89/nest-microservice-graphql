@@ -9,10 +9,12 @@ import { LocalStrategy } from './strategies/local.strategy';
 import { UserModule } from '../user/user.module';
 import { ProxyModule } from '../common/proxy/proxy.module';
 import { WsGateway } from './ws.gateway';
+import { RoleModule } from 'apps/auth/src/role/role.module';
 
 @Module({
   imports: [
     UserModule,
+    RoleModule,
     PassportModule,
     ProxyModule,
     JwtModule.registerAsync({

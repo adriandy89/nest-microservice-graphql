@@ -2,16 +2,16 @@ import { RoleService } from './role.service';
 import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { RoleMsg } from 'libs/common/constants/rabbitmq.constants';
-import { RoleDTO } from 'libs/common/dtos/role.dto';
 import { handleError } from 'libs/common/utils/error-handler-micro';
 import { IMeta } from 'libs/common/interfaces/metadata.interface';
+import { CreateRoleInput, UpdateRoleInput } from 'libs/common/dtos/inputs/role';
 
 @Controller()
 export class RoleController {
   constructor(private readonly roleService: RoleService) {}
 
   @MessagePattern(RoleMsg.CREATE)
-  create(@Payload() payload: { roleDTO: RoleDTO; meta: IMeta }) {
+  create(@Payload() payload: { roleDTO: CreateRoleInput; meta: IMeta }) {
     return this.roleService
       .create(payload.roleDTO, payload.meta)
       .catch((error) => {
@@ -38,8 +38,8 @@ export class RoleController {
   }
 
   @MessagePattern(RoleMsg.UPDATE)
-  update(@Payload() payload: { id: string; roleDTO: RoleDTO; meta: IMeta }) {
-    return this.roleService.update(payload.id, payload.roleDTO, payload.meta);
+  update(@Payload() payload: { roleDTO: UpdateRoleInput; meta: IMeta }) {
+    return this.roleService.update(payload.roleDTO, payload.meta);
   }
 
   @MessagePattern(RoleMsg.DELETE)

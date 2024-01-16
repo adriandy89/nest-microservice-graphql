@@ -1,39 +1,36 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { UserDocument } from 'libs/common/schemas/user.schema';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import {
-  BadRequestException,
-  ConflictException,
-  UseGuards,
-} from '@nestjs/common';
+import { BadRequestException, UseGuards } from '@nestjs/common';
 import { Permissions } from '../auth/decorators/permission.decorator';
 import { PermissionsGuard } from '../auth/guards/permission.guard';
 import { GetUserInfo } from '../auth/decorators/get-user-info.decorator';
 import { ClientProxyAPI } from '../common/proxy/client-proxy';
-import { UserMsg } from 'libs/common/constants/rabbitmq.constants';
+import { RoleMsg } from 'libs/common/constants/rabbitmq.constants';
 import { IMeta } from 'libs/common/interfaces/metadata.interface';
-import { CreateUserInput, UpdateUserInput } from 'libs/common/dtos/inputs/user';
 import { ValidIdArgs } from 'libs/common/dtos/args';
+import { RoleDocument } from 'libs/common/schemas/role.schema';
+import { CreateRoleInput } from 'libs/common/dtos/inputs/role/create-role.input';
+import { UpdateRoleInput } from 'libs/common/dtos/inputs/role/update-role.input';
 
-@Resolver(() => UserDocument)
+@Resolver(() => RoleDocument)
 @UseGuards(JwtAuthGuard)
-export class UsersResolver {
+export class RolesResolver {
   constructor(private readonly clientProxy: ClientProxyAPI) {}
   private clientProxyAccessControl =
     this.clientProxy.clientProxyAccessControl();
 
   @Permissions({ administration: ['list', 'create', 'update', 'delete'] })
   @UseGuards(PermissionsGuard)
-  @Query(() => [UserDocument], { name: 'users' })
+  @Query(() => [RoleDocument], { name: 'roles' })
   findAll(@GetUserInfo() meta: IMeta) {
-    return this.clientProxyAccessControl.send(UserMsg.FIND_ALL, { meta });
+    return this.clientProxyAccessControl.send(RoleMsg.FIND_ALL, { meta });
   }
 
   @Permissions({ administration: ['list', 'create', 'update', 'delete'] })
   @UseGuards(PermissionsGuard)
-  @Query(() => UserDocument, { name: 'user' })
+  @Query(() => RoleDocument, { name: 'role' })
   findOne(@Args() { id }: ValidIdArgs, @GetUserInfo() meta: IMeta) {
-    return this.clientProxyAccessControl.send(UserMsg.FIND_ONE, {
+    return this.clientProxyAccessControl.send(RoleMsg.FIND_ONE, {
       id,
       meta,
     });
@@ -41,38 +38,36 @@ export class UsersResolver {
 
   @Permissions({ administration: ['list', 'create', 'update', 'delete'] })
   @UseGuards(PermissionsGuard)
-  @Mutation(() => UserDocument, { name: 'createUser' })
+  @Mutation(() => RoleDocument, { name: 'createRole' })
   async create(
-    @Args('createUserInput') userDTO: CreateUserInput,
+    @Args('createRoleInput') roleDTO: CreateRoleInput,
     @GetUserInfo() meta: IMeta,
   ) {
-    if (userDTO.username == 'sadmin')
-      throw new ConflictException('Duplicate, already exist');
-    if (!userDTO.organization && !meta.organization)
+    if (!roleDTO.organization && !meta.organization)
       throw new BadRequestException('organization required');
-    return this.clientProxyAccessControl.send(UserMsg.CREATE, {
-      userDTO,
+    return this.clientProxyAccessControl.send(RoleMsg.CREATE, {
+      roleDTO,
       meta,
     });
   }
 
   @Permissions({ administration: ['list', 'create', 'update', 'delete'] })
   @UseGuards(PermissionsGuard)
-  @Mutation(() => UserDocument, { name: 'updateUser' })
+  @Mutation(() => RoleDocument, { name: 'updateRole' })
   async update(
-    @Args('updateUserInput') userDTO: UpdateUserInput,
+    @Args('updateRoleInput') roleDTO: UpdateRoleInput,
     @GetUserInfo() meta: IMeta,
   ) {
-    return this.clientProxyAccessControl.send(UserMsg.UPDATE, {
-      userDTO,
+    return this.clientProxyAccessControl.send(RoleMsg.UPDATE, {
+      roleDTO,
       meta,
     });
   }
 
   @Permissions({ administration: ['list', 'create', 'update', 'delete'] })
   @UseGuards(PermissionsGuard)
-  @Mutation(() => UserDocument, { name: 'deleteUser' })
+  @Mutation(() => RoleDocument, { name: 'deleteRole' })
   delete(@Args() { id }: ValidIdArgs, @GetUserInfo() meta: IMeta) {
-    return this.clientProxyAccessControl.send(UserMsg.DELETE, { id, meta });
+    return this.clientProxyAccessControl.send(RoleMsg.DELETE, { id, meta });
   }
 }

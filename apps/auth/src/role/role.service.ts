@@ -1,16 +1,15 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { HttpStatus, Injectable } from '@nestjs/common';
-import { RoleDTO } from 'libs/common/dtos/role.dto';
+import { Injectable } from '@nestjs/common';
 import { IMeta } from 'libs/common/interfaces/metadata.interface';
 import { RoleRepository } from './role.repository';
 import { RoleDocument } from 'libs/common/schemas/role.schema';
 import { FilterQuery } from 'mongoose';
+import { UpdateRoleInput } from 'libs/common/dtos/inputs/role';
 
 @Injectable()
 export class RoleService {
   constructor(private roleRepository: RoleRepository) {}
 
-  async create(roleDTO: RoleDTO, meta: IMeta) {
+  async create(roleDTO: any, meta: IMeta) {
     return await this.roleRepository.create({
       ...roleDTO,
       organization: meta.organization ?? roleDTO.organization,
@@ -29,8 +28,8 @@ export class RoleService {
     return await this.roleRepository.findOne(filterQuery);
   }
 
-  async update(id: string, roleDTO: RoleDTO, meta: IMeta) {
-    const filterQuery: FilterQuery<RoleDocument> = { _id: id };
+  async update({ _id, ...roleDTO }: UpdateRoleInput, meta: IMeta) {
+    const filterQuery: FilterQuery<RoleDocument> = { _id };
     if (meta.organization) filterQuery.organization = meta.organization;
     return await this.roleRepository.findOneAndUpdate(filterQuery, roleDTO);
   }
@@ -38,10 +37,6 @@ export class RoleService {
   async delete(id: string, meta: IMeta) {
     const filterQuery: FilterQuery<RoleDocument> = { _id: id };
     if (meta.organization) filterQuery.organization = meta.organization;
-    await this.roleRepository.findOneAndDelete(filterQuery);
-    return {
-      status: HttpStatus.OK,
-      msg: 'Deleted',
-    };
+    return await this.roleRepository.findOneAndDelete(filterQuery);
   }
 }

@@ -4,7 +4,7 @@ import { IMeta } from 'libs/common/interfaces/metadata.interface';
 import { UserRepository } from './user.repository';
 import { FilterQuery } from 'mongoose';
 import { UserDocument } from 'libs/common/schemas/user.schema';
-import { CreateUserInput, UpdateUserInput } from 'libs/common/dtos/user/inputs';
+import { CreateUserInput, UpdateUserInput } from 'libs/common/dtos/inputs/user';
 
 @Injectable()
 export class UserService {

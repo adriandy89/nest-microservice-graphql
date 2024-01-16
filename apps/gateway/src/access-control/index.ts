@@ -17,7 +17,5 @@ export * from './common/proxy/client-proxy';
 export * from './common/proxy/proxy.module';
 export * from './organization/organization.controller';
 export * from './organization/organization.module';
-export * from './role/role.controller';
 export * from './role/role.module';
-export * from './user/user.controller';
 export * from './user/user.module';

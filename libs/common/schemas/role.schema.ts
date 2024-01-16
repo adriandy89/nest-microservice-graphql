@@ -2,8 +2,9 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Field, ObjectType } from '@nestjs/graphql';
 import { AbstractDocument } from '../database';
 import { Types } from 'mongoose';
-import { Permissions, PERMISSIONS } from '../constants/module-access.constants';
+import { PERMISSIONS_CONST } from '../constants/permissions.constants';
 import { OrganizationDocument } from './organization.schema';
+import { Permissions, PermissionsEnum } from '../enums';
 
 @Schema({ versionKey: false, timestamps: true, collection: 'roles' })
 @ObjectType()
@@ -24,12 +25,12 @@ export class RoleDocument extends AbstractDocument {
     type: {
       administration: {
         type: [String],
-        enum: PERMISSIONS,
+        enum: PERMISSIONS_CONST,
         required: false,
       },
       products: {
         type: [String],
-        enum: PERMISSIONS,
+        enum: PERMISSIONS_CONST,
         required: false,
       },
     },
@@ -43,11 +44,11 @@ export class RoleDocument extends AbstractDocument {
 }
 
 @ObjectType()
-class PermissionsTypes {
-  @Field(() => [String], { nullable: true })
+export class PermissionsTypes {
+  @Field(() => [PermissionsEnum], { nullable: true })
   administration: Permissions[];
 
-  @Field(() => [String], { nullable: true })
+  @Field(() => [PermissionsEnum], { nullable: true })
   products: Permissions[];
 }
 
