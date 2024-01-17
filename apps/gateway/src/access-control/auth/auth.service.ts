@@ -46,8 +46,8 @@ export class AuthService {
           name: 'Super Admin',
           email: 'sadmin',
           permissions: {
-            administration: ['admin'],
-            products: ['admin'],
+            administration: ['ADMIN'],
+            products: ['ADMIN'],
           },
         },
       };
