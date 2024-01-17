@@ -41,12 +41,29 @@ export class AuthService {
     if (user?.username === 'sadmin') {
       return {
         access_token: this.jwtService.sign({ userId: user.username }),
+        user: {
+          username: 'sadmin',
+          name: 'Super Admin',
+          email: 'sadmin',
+          permissions: {
+            administration: ['admin'],
+            products: ['admin'],
+          },
+        },
       };
     }
     const payload = {
       userId: user._id,
     };
-    return { access_token: this.jwtService.sign(payload) };
+    return {
+      access_token: this.jwtService.sign(payload),
+      user: {
+        username: user.username,
+        name: user.name,
+        email: user.email,
+        permissions: user.role?.permissions,
+      },
+    };
   }
 
   // async signUp(userDTO: UserDTO) {
